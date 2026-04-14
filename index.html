@@ -5,305 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Funder Acquisition Agent</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            color: #667eea;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 1.1em;
-        }
-
-        .dashboard {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .search-panel {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        }
-
-        .search-panel h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.5em;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-            font-weight: 600;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1em;
-            transition: all 0.3s;
-        }
-
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .btn {
-            padding: 14px 30px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: white;
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
-            color: white;
-        }
-
-        .results-panel {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        }
-
-        .results-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .results-header h2 {
-            color: #333;
-            font-size: 1.5em;
-        }
-
-        .stats {
-            display: flex;
-            gap: 20px;
-        }
-
-        .stat-badge {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9em;
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 40px;
-        }
-
-        .loading.active {
-            display: block;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .funders-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 20px;
-            max-height: 600px;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        .funder-card {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            border-radius: 15px;
-            padding: 20px;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .funder-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-
-        .funder-name {
-            font-size: 1.3em;
-            font-weight: 700;
-            color: #667eea;
-            margin-bottom: 15px;
-        }
-
-        .funder-info {
-            margin-bottom: 10px;
-            color: #555;
-            font-size: 0.95em;
-        }
-
-        .funder-info strong {
-            color: #333;
-        }
-
-        .funder-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .btn-small {
-            padding: 8px 15px;
-            font-size: 0.85em;
-            flex: 1;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .empty-state svg {
-            width: 150px;
-            height: 150px;
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-
-        .empty-state h3 {
-            color: #666;
-            margin-bottom: 10px;
-        }
-
-        .empty-state p {
-            color: #999;
-        }
-
-        .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .tag {
-            background: #667eea;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 0.8em;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #e0e0e0;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-top: 10px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            transition: width 0.3s;
-        }
-
-        @media (max-width: 1024px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .funders-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        h1 { color: #667eea; font-size: 2.5em; margin-bottom: 10px; }
+        .subtitle { color: #666; font-size: 1.1em; }
+        .dashboard { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; margin-bottom: 30px; }
+        .search-panel, .results-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 20px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .search-panel h2, .results-header h2 { color: #333; margin-bottom: 20px; font-size: 1.5em; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: #555; font-weight: 600; }
+        input, textarea, select { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; transition: all 0.3s; }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+        textarea { resize: vertical; min-height: 80px; }
+        .btn { padding: 14px 30px; border: none; border-radius: 10px; font-size: 1em; font-weight: 600; cursor: pointer; transition: all 0.3s; width: 100%; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4); }
+        .btn-success { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
+        .btn-danger { background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%); color: white; }
+        .btn-small { padding: 8px 15px; font-size: 0.85em; flex: 1; }
+        .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
+        .stats { display: flex; gap: 15px; }
+        .stat-badge { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.9em; }
+        .loading { display: none; text-align: center; padding: 40px; }
+        .loading.active { display: block; }
+        .spinner { width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .funders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; max-height: 600px; overflow-y: auto; padding-right: 10px; }
+        .funder-card { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 15px; padding: 20px; transition: all 0.3s; position: relative; }
+        .funder-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .funder-name { font-size: 1.3em; font-weight: 700; color: #667eea; margin-bottom: 15px; }
+        .funder-info { margin-bottom: 10px; color: #555; font-size: 0.95em; }
+        .funder-info strong { color: #333; }
+        .funder-actions { display: flex; gap: 10px; margin-top: 15px; }
+        .empty-state { text-align: center; padding: 60px 20px; }
+        .empty-state svg { width: 150px; height: 150px; margin-bottom: 20px; opacity: 0.5; }
+        .empty-state h3 { color: #666; margin-bottom: 10px; }
+        .empty-state p { color: #999; }
+        .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .tag { background: #667eea; color: white; padding: 4px 10px; border-radius: 15px; font-size: 0.8em; }
+        .progress-bar { width: 100%; height: 8px; background: #e0e0e0; border-radius: 10px; overflow: hidden; margin-top: 10px; }
+        .progress-fill { height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); transition: width 0.3s; }
+        .status-msg { padding: 15px; border-radius: 10px; margin: 15px 0; font-weight: 600; }
+        .status-msg.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status-msg.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .status-msg.info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        @media (max-width: 1024px) { .dashboard { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { .funders-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>🏦 Funder Acquisition Agent</h1>
-            <p class="subtitle">Automatically search and acquire funder information from multiple sources worldwide</p>
+            <p class="subtitle">Automatically searches the web for REAL funders, investors, grants, and venture capital firms</p>
         </header>
 
         <div class="dashboard">
@@ -311,40 +67,32 @@
                 <h2>🔍 Search Funders</h2>
                 <form id="searchForm">
                     <div class="form-group">
-                        <label for="keywords">Keywords / Industry</label>
+                        <label for="keywords">Keywords / Industry *</label>
                         <input type="text" id="keywords" placeholder="e.g., Technology, Agriculture, Healthcare..." required>
                     </div>
-
                     <div class="form-group">
                         <label for="funderType">Funder Type</label>
                         <select id="funderType">
                             <option value="all">All Types</option>
-                            <option value="venture-capital">Venture Capital</option>
-                            <option value="angel-investors">Angel Investors</option>
-                            <option value="grants">Grants & Foundations</option>
-                            <option value="private-equity">Private Equity</option>
+                            <option value="venture capital">Venture Capital</option>
+                            <option value="angel investor">Angel Investors</option>
+                            <option value="grant">Grants & Foundations</option>
+                            <option value="private equity">Private Equity</option>
                             <option value="government">Government Programs</option>
-                            <option value="crowdfunding">Crowdfunding</option>
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label for="region">Region / Country</label>
                         <input type="text" id="region" placeholder="e.g., South Africa, USA, Global...">
                     </div>
-
-                    <div class="form-group">
-                        <label for="minAmount">Minimum Funding Amount (USD)</label>
-                        <input type="number" id="minAmount" placeholder="e.g., 100000">
-                    </div>
-
                     <div class="form-group">
                         <label for="additionalNotes">Additional Requirements</label>
-                        <textarea id="additionalNotes" placeholder="Any specific requirements or preferences..."></textarea>
+                        <textarea id="additionalNotes" placeholder="Any specific requirements..."></textarea>
                     </div>
-
-                    <button type="submit" class="btn btn-primary">🚀 Search Funders</button>
+                    <button type="submit" class="btn btn-primary">🚀 Search REAL Funders</button>
                 </form>
+
+                <div id="statusMessage"></div>
 
                 <div style="margin-top: 30px;">
                     <h3 style="margin-bottom: 15px; color: #333;">📊 Search History</h3>
@@ -365,8 +113,8 @@
 
                 <div class="loading" id="loading">
                     <div class="spinner"></div>
-                    <p style="color: #666; font-size: 1.1em;">Searching for funders...</p>
-                    <p style="color: #999; font-size: 0.9em;">Scanning multiple databases and directories</p>
+                    <p style="color: #666; font-size: 1.1em;">🔍 Searching the web for REAL funders...</p>
+                    <p style="color: #999; font-size: 0.9em;">This may take 30-60 seconds for thorough web scraping</p>
                     <div class="progress-bar">
                         <div class="progress-fill" id="progressFill" style="width: 0%"></div>
                     </div>
@@ -378,8 +126,8 @@
                             <circle cx="11" cy="11" r="8"></circle>
                             <path d="M21 21l-4.35-4.35"></path>
                         </svg>
-                        <h3>No Funders Found</h3>
-                        <p>Start your search to discover potential funders</p>
+                        <h3>No Funders Found Yet</h3>
+                        <p>Enter keywords and click "Search REAL Funders" to start</p>
                     </div>
                 </div>
             </div>
@@ -387,11 +135,9 @@
     </div>
 
     <script>
-        // State management
-        let funders = JSON.parse(localStorage.getItem('funders') || '[]');
+        let funders = [];
         let searchHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
 
-        // DOM elements
         const searchForm = document.getElementById('searchForm');
         const fundersGrid = document.getElementById('fundersGrid');
         const loading = document.getElementById('loading');
@@ -399,14 +145,18 @@
         const totalFundersEl = document.getElementById('totalFunders');
         const lastSearchEl = document.getElementById('lastSearch');
         const searchHistoryEl = document.getElementById('searchHistory');
+        const statusMessage = document.getElementById('statusMessage');
 
-        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            renderFunders();
             renderSearchHistory();
+            loadSavedFunders();
         });
 
-        // Search form submission
+        function showStatus(message, type = 'info') {
+            statusMessage.innerHTML = `<div class="status-msg ${type}">${message}</div>`;
+            setTimeout(() => statusMessage.innerHTML = '', 5000);
+        }
+
         searchForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -414,76 +164,55 @@
                 keywords: document.getElementById('keywords').value,
                 funderType: document.getElementById('funderType').value,
                 region: document.getElementById('region').value,
-                minAmount: document.getElementById('minAmount').value,
-                additionalNotes: document.getElementById('additionalNotes').value,
                 timestamp: new Date().toISOString()
             };
 
-            // Show loading
             loading.classList.add('active');
             fundersGrid.innerHTML = '';
-            
-            // Animate progress
             animateProgress();
+            showStatus('🔍 Searching DuckDuckGo, Wikipedia, and scraping websites for REAL funders...', 'info');
 
-            // Search for funders
-            const newFunders = await searchFunders(query);
-            
-            // Save to state
-            funders = [...funders, ...newFunders];
-            localStorage.setItem('funders', JSON.stringify(funders));
+            try {
+                const response = await fetch(`/api/search-funders?keywords=${encodeURIComponent(query.keywords)}&funderType=${query.funderType}&region=${encodeURIComponent(query.region || '')}`);
+                
+                if (!response.ok) throw new Error('Search failed');
+                
+                const data = await response.json();
+                
+                if (data.success && data.funders.length > 0) {
+                    funders = data.funders;
+                    showStatus(`✅ Found ${data.count} REAL funders from web search!`, 'success');
+                } else {
+                    funders = [];
+                    showStatus('❌ No funders found. Try different keywords or check back later.', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                funders = [];
+                showStatus('❌ Error searching. Please try again.', 'error');
+            }
+
+            loading.classList.remove('active');
+            progressFill.style.width = '0%';
             
             searchHistory.unshift(query);
             localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
-
-            // Hide loading
-            loading.classList.remove('active');
-            progressFill.style.width = '0%';
-
-            // Update UI
+            
             renderFunders();
             renderSearchHistory();
             updateStats(query);
         });
 
-        // Search funders function - REAL DATA ONLY
-        async function searchFunders(query) {
-            try {
-                const response = await fetch(`http://localhost:3001/api/search-funders?keywords=${encodeURIComponent(query.keywords)}&funderType=${query.funderType}&region=${encodeURIComponent(query.region || '')}&minAmount=${query.minAmount || 0}`);
-
-                if (!response.ok) {
-                    throw new Error('Failed to search funders');
-                }
-
-                const data = await response.json();
-
-                if (data.success && data.funders.length > 0) {
-                    return data.funders;
-                } else {
-                    // Return empty array - NO MOCK DATA
-                    return [];
-                }
-            } catch (error) {
-                console.error('Error searching funders:', error);
-                return [];
-            }
-        }
-
-        // Animate progress bar
         function animateProgress() {
             let progress = 0;
             const interval = setInterval(() => {
-                progress += Math.random() * 10;
+                progress += Math.random() * 5;
                 if (progress > 95) progress = 95;
                 progressFill.style.width = `${progress}%`;
-                
-                if (progress >= 95) {
-                    clearInterval(interval);
-                }
-            }, 200);
+                if (progress >= 95) clearInterval(interval);
+            }, 500);
         }
 
-        // Render funders
         function renderFunders() {
             if (funders.length === 0) {
                 fundersGrid.innerHTML = `
@@ -493,37 +222,37 @@
                             <path d="M21 21l-4.35-4.35"></path>
                         </svg>
                         <h3>No Funders Found</h3>
-                        <p>Start your search to discover potential funders</p>
+                        <p>Try different keywords or search terms</p>
                     </div>
                 `;
                 totalFundersEl.textContent = '0 Funders';
                 return;
             }
 
-            totalFundersEl.textContent = `${funders.length} Funders`;
+            totalFundersEl.textContent = `${funders.length} REAL Funders`;
             
             fundersGrid.innerHTML = funders.map(funder => `
                 <div class="funder-card">
                     <div class="funder-name">${funder.name}</div>
                     <div class="funder-info"><strong>Type:</strong> ${funder.type}</div>
-                    <div class="funder-info"><strong>Email:</strong> ${funder.email}</div>
-                    <div class="funder-info"><strong>Phone:</strong> ${funder.phone}</div>
-                    <div class="funder-info"><strong>Address:</strong> ${funder.address}</div>
-                    <div class="funder-info"><strong>Funding Range:</strong> $${formatNumber(funder.minFunding)} - $${formatNumber(funder.maxFunding)}</div>
-                    <div class="funder-info"><strong>Website:</strong> <a href="${funder.website}" target="_blank" style="color: #667eea;">${funder.website}</a></div>
+                    <div class="funder-info"><strong>Email:</strong> ${funder.email || 'N/A'}</div>
+                    <div class="funder-info"><strong>Phone:</strong> ${funder.phone || 'N/A'}</div>
+                    <div class="funder-info"><strong>Address:</strong> ${funder.address || 'N/A'}</div>
+                    <div class="funder-info"><strong>Website:</strong> <a href="${funder.website}" target="_blank" style="color: #667eea;">Visit</a></div>
+                    <div class="funder-info"><strong>Source:</strong> ${funder.source}</div>
+                    ${funder.description ? `<div style="background: rgba(255,255,255,0.7); padding: 10px; border-radius: 8px; margin: 10px 0; font-size: 0.9em; color: #666;">${funder.description.substring(0, 200)}...</div>` : ''}
                     <div class="tags">
                         <span class="tag">${funder.region}</span>
                         <span class="tag">${funder.keywords}</span>
                     </div>
                     <div class="funder-actions">
-                        <button class="btn btn-success btn-small" onclick="saveFunder(${funder.id})">💾 Save</button>
-                        <button class="btn btn-danger btn-small" onclick="deleteFunder(${funder.id})">🗑️ Delete</button>
+                        <button class="btn btn-success btn-small" onclick="saveFunder('${funder.id}')">💾 Save</button>
+                        <button class="btn btn-danger btn-small" onclick="deleteFunder('${funder.id}')">🗑️ Delete</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // Render search history
         function renderSearchHistory() {
             if (searchHistory.length === 0) {
                 searchHistoryEl.innerHTML = '<p style="color: #999; text-align: center;">No searches yet</p>';
@@ -532,21 +261,18 @@
             }
 
             lastSearchEl.textContent = `Last: ${new Date(searchHistory[0].timestamp).toLocaleString()}`;
-            
-            searchHistoryEl.innerHTML = searchHistory.slice(0, 10).map(search => `
+            searchHistoryEl.innerHTML = searchHistory.slice(0, 10).map(s => `
                 <div style="padding: 10px; background: #f5f7fa; border-radius: 8px; margin-bottom: 8px;">
-                    <div style="font-weight: 600; color: #333;">${search.keywords}</div>
-                    <div style="font-size: 0.85em; color: #666;">${search.funderType} • ${search.region || 'Global'} • ${new Date(search.timestamp).toLocaleString()}</div>
+                    <div style="font-weight: 600; color: #333;">${s.keywords}</div>
+                    <div style="font-size: 0.85em; color: #666;">${s.funderType} • ${s.region || 'Global'} • ${new Date(s.timestamp).toLocaleString()}</div>
                 </div>
             `).join('');
         }
 
-        // Update stats
         function updateStats(query) {
             lastSearchEl.textContent = `Last: ${new Date().toLocaleString()}`;
         }
 
-        // Save funder
         function saveFunder(id) {
             const funder = funders.find(f => f.id === id);
             if (funder) {
@@ -554,36 +280,29 @@
                 if (!saved.find(s => s.id === id)) {
                     saved.push(funder);
                     localStorage.setItem('savedFunders', JSON.stringify(saved));
-                    alert(`✅ ${funder.name} saved successfully!`);
+                    alert(`✅ ${funder.name} saved!`);
                 } else {
-                    alert('ℹ️ Funder already saved');
+                    alert('ℹ️ Already saved');
                 }
             }
         }
 
-        // Delete funder
         function deleteFunder(id) {
-            if (confirm('Are you sure you want to delete this funder?')) {
+            if (confirm('Delete this funder?')) {
                 funders = funders.filter(f => f.id !== id);
-                localStorage.setItem('funders', JSON.stringify(funders));
                 renderFunders();
             }
         }
 
-        // Format numbers
-        function formatNumber(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        }
-
-        // Export funders
-        function exportFunders() {
-            const dataStr = JSON.stringify(funders, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `funders-${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
+        async function loadSavedFunders() {
+            try {
+                const resp = await fetch('/api/funders');
+                const data = await resp.json();
+                if (data.success && data.funders.length > 0) {
+                    funders = data.funders.slice(-50);
+                    renderFunders();
+                }
+            } catch (e) {}
         }
     </script>
 </body>

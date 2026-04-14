@@ -446,83 +446,27 @@
             updateStats(query);
         });
 
-        // Search funders function
+        // Search funders function - REAL DATA ONLY
         async function searchFunders(query) {
             try {
-                // Call backend API to search real web
                 const response = await fetch(`http://localhost:3001/api/search-funders?keywords=${encodeURIComponent(query.keywords)}&funderType=${query.funderType}&region=${encodeURIComponent(query.region || '')}&minAmount=${query.minAmount || 0}`);
-                
+
                 if (!response.ok) {
                     throw new Error('Failed to search funders');
                 }
 
                 const data = await response.json();
-                
+
                 if (data.success && data.funders.length > 0) {
                     return data.funders;
                 } else {
-                    // Fallback to generated data if web search returns nothing
-                    return generateMockFunders(query);
+                    // Return empty array - NO MOCK DATA
+                    return [];
                 }
             } catch (error) {
                 console.error('Error searching funders:', error);
-                // Fallback to generated data
-                return generateMockFunders(query);
+                return [];
             }
-        }
-
-        // Generate mock funders based on query
-        function generateMockFunders(query) {
-            const funders = [];
-            const count = Math.floor(Math.random() * 15) + 10;
-
-            const funderTemplates = [
-                { name: 'Global Innovation Fund', type: 'Venture Capital', regions: ['Global', 'Africa', 'USA'] },
-                { name: 'Agricultural Development Foundation', type: 'Foundation', regions: ['Africa', 'Global'] },
-                { name: 'TechVenture Capital Partners', type: 'Venture Capital', regions: ['USA', 'Global', 'Europe'] },
-                { name: 'Sustainable Growth Fund', type: 'Private Equity', regions: ['Global', 'South Africa'] },
-                { name: 'Angel Investor Network', type: 'Angel Investors', regions: ['USA', 'Global'] },
-                { name: 'Government Enterprise Grant', type: 'Government', regions: ['South Africa', 'Africa'] },
-                { name: 'Healthcare Innovation Fund', type: 'Foundation', regions: ['Global', 'USA', 'Europe'] },
-                { name: 'Startup Accelerator Program', type: 'Venture Capital', regions: ['Global', 'Africa'] },
-                { name: 'Community Development Fund', type: 'Government', regions: ['South Africa'] },
-                { name: 'Impact Investment Partners', type: 'Private Equity', regions: ['Global', 'Africa', 'Asia'] },
-                { name: 'Small Business Grant Program', type: 'Government', regions: ['USA', 'Global'] },
-                { name: 'Technology Transfer Fund', type: 'Foundation', regions: ['Europe', 'Global'] },
-                { name: 'Emerging Markets Capital', type: 'Venture Capital', regions: ['Africa', 'Asia', 'Global'] },
-                { name: 'Research & Development Grant', type: 'Government', regions: ['Global'] },
-                { name: 'Social Enterprise Fund', type: 'Foundation', regions: ['Global', 'Africa', 'USA'] }
-            ];
-
-            const matchingTemplates = funderTemplates.filter(t => 
-                t.type.toLowerCase().includes(query.funderType.toLowerCase()) || 
-                query.funderType === 'all' ||
-                query.keywords.toLowerCase().includes(t.type.toLowerCase())
-            );
-
-            for (let i = 0; i < count; i++) {
-                const template = matchingTemplates[i % matchingTemplates.length];
-                const minAmt = query.minAmount ? parseInt(query.minAmount) : 50000;
-                const maxFunding = minAmt * (Math.floor(Math.random() * 20) + 5);
-
-                funders.push({
-                    id: Date.now() + i,
-                    name: template.name,
-                    type: template.type,
-                    description: `Provides funding for ${query.keywords} projects with focus on innovation and growth.`,
-                    email: `contact@${template.name.toLowerCase().replace(/\s+/g, '')}.org`,
-                    phone: `+${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
-                    address: `${Math.floor(Math.random() * 9999) + 1} Innovation Drive, ${template.regions[0]}`,
-                    region: template.regions[Math.floor(Math.random() * template.regions.length)],
-                    minFunding: minAmt,
-                    maxFunding: maxFunding,
-                    website: `https://www.${template.name.toLowerCase().replace(/\s+/g, '')}.org`,
-                    keywords: query.keywords,
-                    timestamp: new Date().toISOString()
-                });
-            }
-
-            return funders;
         }
 
         // Animate progress bar

@@ -112,4 +112,8 @@ Pull requests are welcome. For major changes, please open an issue first.
 
 ## 📄 License
 
-MIT
+Copyright © 2026 Thando Hlomuka. All rights reserved.
+
+This software is the exclusive property of Thando Hlomuka. Unauthorized copying, distribution, or use of this software, via any medium, is strictly prohibited.
+
+For licensing inquiries, contact: thando@metramarket.co.za
